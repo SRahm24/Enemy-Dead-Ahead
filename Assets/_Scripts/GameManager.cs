@@ -28,16 +28,19 @@ public class GameManager : MonoBehaviour
     public Text enemyShipCountText;
     public Button confirmPrompt;
     public Text inputText;
+    public Text timerHeader;
 
     [Header("Objects")]
     public GameObject barrelPrefab;
     public GameObject enemyBarrelPrefab;
     public GameObject firePrefab;
+    public int countdownTime; 
 
     private bool setupComplete = false;
     private bool playerTurn = true;
     private bool playerClicked = false;
     private bool checkInput = false;
+    private bool timerStarted = false;
     
     private List<GameObject> playerFires = new List<GameObject>();
     private List<GameObject> enemyFires = new List<GameObject>();
@@ -58,6 +61,14 @@ public class GameManager : MonoBehaviour
         rotateButton.onClick.AddListener(() => RotateClicked());
         replayButton.onClick.AddListener(() => ReplayClicked());
         enemyShips = enemyScript.PlaceEnemyShips();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     private void NextShipClicked()
@@ -84,6 +95,27 @@ public class GameManager : MonoBehaviour
         }
     }
     
+    IEnumerator CountdownStart()
+    {
+        while (countdownTime > 0 && timerStarted) 
+        {
+            timerHeader.text = countdownTime.ToString();
+            yield return new WaitForSeconds(1f);
+            countdownTime--;
+        }
+        if (countdownTime == 0) 
+        {
+        messageHeader.text = "Times up!";
+        confirmPrompt.gameObject.SetActive(false);
+        playerTurn = false;
+        checkInput = true;
+        timerStarted = false;
+        timerHeader.gameObject.SetActive(false);
+        playerClicked = false;
+        Invoke("EndPlayerTurn", 1.0f);
+        }
+    }
+
     public void TileClicked(GameObject tile)
     {
         if(setupComplete && playerTurn && !playerClicked)
@@ -93,6 +125,9 @@ public class GameManager : MonoBehaviour
             randomNumber = UnityEngine.Random.Range(100, 999);
             messageHeader.text = "Coordinates are " + randomNumber.ToString() + "!";
             confirmPrompt.gameObject.SetActive(true);
+            timerHeader.gameObject.SetActive(true);
+            timerStarted = true;
+            StartCoroutine(CountdownStart());
             currentTile = tile;            
         } else if (!setupComplete)
         {
@@ -112,18 +147,25 @@ public class GameManager : MonoBehaviour
         inputfield.text = "";
         if (input == randomNumber.ToString())
         {
+            timerHeader.gameObject.SetActive(false);
             Vector3 tilePos = currentTile.transform.position;
             tilePos.y += 15;
             checkInput = true;
             playerTurn = false;
+            timerStarted = false;
             Instantiate(barrelPrefab, tilePos, barrelPrefab.transform.rotation);
         }
         else
         {
             messageHeader.text = "Wrong coordinates Admiral!";
+            timerHeader.gameObject.SetActive(false);
+            timerStarted = false;
             playerTurn = false;
             checkInput = true;
+            playerClicked = false;
+            Invoke("EndPlayerTurn", 1.0f);
         }
+        countdownTime = 5;
     }
 
     private void PlaceShip(GameObject tile)
@@ -240,7 +282,7 @@ public class GameManager : MonoBehaviour
     {
         messageHeader.text = "Naval Action Over: " + winner;
         replayButton.gameObject.SetActive(true);
-        
+        copyrightBackGround.gameObject.SetActive(true);
         playerTurn = false;
     }
 

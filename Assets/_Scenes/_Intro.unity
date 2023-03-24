@@ -1076,9 +1076,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "Instructions:\nAfter clicking play,\nPosition your ship one-by-one \nby
-    clicking next, \nand then click on a tile and click \non the input box to \nenter
-    in your input"
+  m_Text: "Instructions:\nAfter clicking play,\nPosition your ship 1-by-1 \nby clicking
+    next, \nand then click on a tile \nand click the input box to \nenter in your
+    input"
 --- !u!222 &1642681017
 CanvasRenderer:
   m_ObjectHideFlags: 0
