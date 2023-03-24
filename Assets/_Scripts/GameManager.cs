@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public Button nextButton;
     public Button rotateButton;
     public Button replayButton;
+    public Image copyrightBackGround;
     public Text messageHeader;
     public Text playerShipCountText;
     public Text enemyShipCountText;
@@ -239,6 +240,7 @@ public class GameManager : MonoBehaviour
     {
         messageHeader.text = "Naval Action Over: " + winner;
         replayButton.gameObject.SetActive(true);
+        
         playerTurn = false;
     }
 
