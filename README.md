@@ -15,7 +15,7 @@ Each cell of the grid corresponds to a specific coordinate on the map.
 Randomly place ships on the grid.
 Ensure ships do not overlap and fit within the boundaries of the grid.
 
-Targeting Mechanics:
+## Targeting Mechanics:
 
 Allow the player to select a plot on the grid to target; the grid is updated to reflect hits and misses.
 
